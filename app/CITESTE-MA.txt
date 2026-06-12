@@ -1,0 +1,101 @@
+VERIFICARE DIFERENTE DECONTURI
+==============================
+
+CE FACE
+-------
+Cauta in notele de cantar (.xlsx) randurile cu diferente: DIF != 0 sau RETUR != 0.
+Daca gaseste, genereaza un raport Excel. Nu modifica fisierele originale.
+
+
+CUM PORNESTI
+------------
+1. Dublu-click pe "Verificare diferente.bat" (sau direct pe verificare-diferente.exe).
+2. Se deschide o fereastra neagra - LAS-O DESCHISA cat lucrezi.
+3. Se deschide automat browserul cu interfata.
+4. Alege luna -> apasa "Verificare".
+5. Daca exista diferente, apasa "Deschidere fisier generat".
+6. Cand termini, inchide fereastra neagra ca sa opresti aplicatia.
+
+
+FISIERE
+-------
+- verificare-diferente.exe   aplicatia (nu o muta singura)
+- config.json                setari (calea catre folderul anului)
+- Verificare diferente.bat   scurtatura de pornire
+Toate trei trebuie sa stea IMPREUNA, in acelasi folder.
+
+
+CULORILE DIN RAPORT
+-------------------
+Coloana DIF si coloana RETUR sunt colorate automat ca sa vezi rapid ce conteaza:
+
+  ROSU      = diferenta reala SEMNIFICATIVA: mai mare de 1% din cantitatea
+              plecata SI cel putin 1 kg. De verificat - poate fi pierdere reala.
+              Ex: plecat 100, livrat 90, DIF 10 (10%, 10kg) -> ROSU.
+              Ex: plecat 88,  livrat 87, DIF 1  (1.1%, 1kg) -> ROSU.
+
+  ROSU PALID = diferenta peste 1% dar sub 1 kg (mai usoara, dar tot de vazut).
+              Ex: plecat 30, livrat 29.4, DIF 0.6 (2%, 0.6kg) -> ROSU PALID.
+
+  FARA CULOARE = diferenta sub 1% din plecat, neglijabila.
+              Ex: plecat 200, livrat 199.5, DIF 0.5 (0.25%) -> fara culoare.
+
+  GALBEN    = TRANSFER. Marfa preluata de la un client si dusa la altul de
+              acelasi sofer/masina, in aceeasi nota. Apare ca o pereche:
+              acelasi produs, aceeasi cantitate, o data cu plus (ex +7) si
+              o data cu minus (ex -7). Nu e pierdere, doar mutare.
+
+  PORTOCALIU = pe coloana RETUR, cand exista RETUR (marfa returnata).
+
+ATENTIE: un plus (ex +5) care NU are perechea lui cu minus ramane ROSU,
+pentru ca atunci chiar lipseste marfa.
+
+
+NUMARUL MASINII
+---------------
+Notele sunt copii ale aceluiasi sablon, asa ca numarul din interiorul fisierului
+(celula) ramane adesea cel vechi. De aceea aplicatia ia numarul masinii din
+NUMELE fisierului (ex "01.05-CUCIUREANU-BT87TIP.xlsx" -> BT-87-TIP).
+Pastreaza numarul corect in numele fisierului.
+
+
+NOTE INCOMPLETE
+---------------
+Daca o nota are coloana CANT LIVRAT goala pe TOATE randurile (livrarea nu a
+fost completata inca), DIF iese egal cu PLECAT - dar nu e o diferenta reala.
+Aplicatia NU pune aceste note in raport. In schimb, le numara si le afiseaza
+intr-o lista "Note incomplete", atat in interfata cat si in raport.
+
+Raportul are DOUA foi:
+  - "Diferente"       : diferentele reale gasite (coloarate ca mai sus);
+  - "Note incomplete" : lista notelor excluse (CANT LIVRAT necompletat),
+                        ca sa stii care note mai trebuie completate.
+Daca nu exista diferente dar exista note incomplete, raportul se genereaza
+oricum (doar cu foaia de note incomplete).
+
+
+SETARI (config.json)
+--------------------
+base_path                 : calea catre folderul anului (ex ...\Note de cantar\2026)
+report_folder             : numele folderului de rapoarte (implicit Rapoarte_Diferente)
+port                      : 0 = alege automat un port liber (recomandat)
+workers                   : cate fisiere se citesc in paralel (implicit 4)
+dif_red_threshold_percent : pragul ROSU, in procente din plecat (implicit 1.0 = 1%).
+dif_red_min_kg            : pragul ROSU minim, in kg (implicit 1.0). Un rand e ROSU
+                            doar daca depaseste AMBELE praguri (procent SI kg).
+                            Mareste-le daca vrei mai putine randuri rosii.
+
+Calea se poate schimba si din interfata, butonul "Modificare cale".
+
+
+UNDE APAR RAPOARTELE
+--------------------
+In folderul lunii, subfolderul Rapoarte_Diferente, cu nume unic:
+  Diferente_<luna>_<utilizator>_<calculator>_<data_ora>.xlsx
+Rapoartele nu se suprascriu intre ele.
+
+
+MAI MULTI UTILIZATORI
+---------------------
+Pot rula mai multi oameni in acelasi timp. Daca doi verifica aceeasi luna,
+apare doar o avertizare; fiecare isi primeste propriul raport.

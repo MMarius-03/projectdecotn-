@@ -1,0 +1,8 @@
+{
+  "base_path": "\\\\192.168.2.121\\public\\Departamente\\Contabilitate\\aNote Cantar\\Note de cantar\\2026",
+  "report_folder": "Rapoarte_Diferente",
+  "port": 0,
+  "workers": 4,
+  "dif_red_threshold_percent": 1.0,
+  "dif_red_min_kg": 1.0
+}
