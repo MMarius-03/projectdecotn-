@@ -11,6 +11,8 @@
 bin/
 build/
 dist/
+app/DECONTverif/
+app/DECONTverif.zip
 
 # Logs and temporary files
 *.log
