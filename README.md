@@ -44,7 +44,7 @@ Exemplu:
 
 ```json
 {
-  "base_path": "\\\\192.168.2.121\\public\\Departamente\\Contabilitate\\aNote Cantar\\Note de cantar\\2026",
+  "base_path": "C:\\Data\\NoteCantar\\2026",
   "report_folder": "Rapoarte_Diferente",
   "port": 0,
   "workers": 4,
